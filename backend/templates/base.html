@@ -1,0 +1,49 @@
+{% load cms_tags sekizai_tags staticfiles i18n %}
+
+<!DOCTYPE html>
+
+
+<html lang="{% get_current_language as LANGUAGE_CODE %}">
+    <head>
+        <title>{% page_attribute 'page_title' %}</title>
+        {% render_block 'css' %}
+
+    
+        <script>
+            window.DJANGO = {
+                env: `{{ settings.DJANGO_ENV.value }}`,
+            };
+        </script>
+
+        {% if settings.DJANGO_ENV.value == 'dev' %}
+
+            <script defer src="{{ settings.WEBPACK_DEV_URL }}/vendor.bundle.js" data-is-reload-on-page-edit></script>
+            <script defer src="{{ settings.WEBPACK_DEV_URL }}/global.bundle.js" data-is-reload-on-page-edit></script>
+
+            <link rel="stylesheet" href="{{ settings.WEBPACK_DEV_URL }}/vendor.css">
+            <link rel="stylesheet" href="{{ settings.WEBPACK_DEV_URL }}/global.css">
+            
+            {% block head_local_frontend_files %}{% endblock %}
+
+        {% else %}
+
+            <script defer src="{% static 'dist/vendor.js' %}" data-is-reload-on-page-edit></script>
+            <script defer src="{% static 'dist/global.js' %}" data-is-reload-on-page-edit></script>
+
+            <link rel="stylesheet" href="{% static 'dist/vendor.css' %}">
+            <link rel="stylesheet" href="{% static 'dist/global.css' %}">
+            
+            {% block head_prod_frontend_files %}{% endblock %}
+        
+        {% endif %}
+    </head>
+    
+    <body>
+        
+        {% cms_toolbar %}
+        
+        {% block content %}{% endblock %}
+        
+        {% render_block 'js' %}
+    </body>
+</html>
