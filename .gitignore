@@ -1,0 +1,13 @@
+*.pyc
+*.pyo
+.env
+.aldryn
+.idea/
+media/
+static-collected/
+/*.sqlite3
+/*.log
+.secret_key
+frontend/dist
+.venv
+node_modules/
